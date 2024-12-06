@@ -1,0 +1,94 @@
+-- Créer un ScreenGui pour l'affichage
+local screenGui = Instance.new("ScreenGui")
+screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+
+-- Créer un cadre pour l'interface de la clé
+local keyFrame = Instance.new("Frame")
+keyFrame.Size = UDim2.new(0, 400, 0, 250)
+keyFrame.Position = UDim2.new(0.5, -200, 0.5, -125)
+keyFrame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+keyFrame.BorderSizePixel = 3
+keyFrame.Parent = screenGui
+keyFrame.Visible = true
+
+-- Titre de la fenêtre
+local title = Instance.new("TextLabel")
+title.Size = UDim2.new(1, 0, 0.2, 0)
+title.Position = UDim2.new(0, 0, 0, 0)
+title.Text = "Entrez la clé"
+title.TextSize = 30
+title.TextColor3 = Color3.fromRGB(255, 255, 255)
+title.BackgroundTransparency = 1
+title.Parent = keyFrame
+
+-- Zone de texte pour entrer la clé
+local keyInput = Instance.new("TextBox")
+keyInput.Size = UDim2.new(0.8, 0, 0.2, 0)
+keyInput.Position = UDim2.new(0.1, 0, 0.3, 0)
+keyInput.PlaceholderText = "Entrez votre clé ici"
+keyInput.TextSize = 20
+keyInput.TextColor3 = Color3.fromRGB(255, 255, 255)
+keyInput.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+keyInput.BorderSizePixel = 2
+keyInput.Parent = keyFrame
+
+-- Bouton pour soumettre la clé
+local submitButton = Instance.new("TextButton")
+submitButton.Size = UDim2.new(0.8, 0, 0.2, 0)
+submitButton.Position = UDim2.new(0.1, 0, 0.6, 0)
+submitButton.Text = "Valider"
+submitButton.TextSize = 20
+submitButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+submitButton.BackgroundColor3 = Color3.fromRGB(0, 128, 0)
+submitButton.Parent = keyFrame
+
+-- Animation de chargement
+local loadingLabel = Instance.new("TextLabel")
+loadingLabel.Size = UDim2.new(1, 0, 0.2, 0)
+loadingLabel.Position = UDim2.new(0, 0, 0.85, 0)
+loadingLabel.Text = ""
+loadingLabel.TextSize = 20
+loadingLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+loadingLabel.BackgroundTransparency = 1
+loadingLabel.Parent = keyFrame
+
+-- La clé valide
+local validKey = "Key" -- La clé que l'utilisateur doit entrer
+
+-- Fonction pour vérifier la clé avec animation de chargement
+local function checkKey()
+    local userKey = keyInput.Text -- Récupérer la clé entrée par l'utilisateur
+
+    -- Démarrer l'animation de chargement
+    loadingLabel.Text = "Vérification en cours..."
+    submitButton.Visible = false
+    keyInput.Visible = false
+
+    -- Attendre quelques secondes pour simuler un chargement
+    wait(3) -- Temps de chargement (modifiable)
+
+    -- Vérifier si la clé est correcte
+    if userKey == validKey then
+        -- Si la clé est correcte, afficher un message de succès et exécuter le script principal
+        loadingLabel.Text = "Clé valide !"
+        loadingLabel.TextColor3 = Color3.fromRGB(0, 255, 0)
+
+        -- Exécuter le script principal après validation
+        wait(1) -- Pause avant de cacher l'interface
+        keyFrame.Visible = false
+        loadstring(game:HttpGet('https://raw.githubusercontent.com/Pro666Pro/UltimateBadgeHub/main/main.lua'))()
+    else
+        -- Si la clé est incorrecte, afficher un message d'erreur
+        loadingLabel.Text = "Clé invalide !"
+        loadingLabel.TextColor3 = Color3.fromRGB(255, 0, 0)
+
+        -- Réinitialiser l'interface après une pause
+        wait(2)
+        loadingLabel.Text = ""
+        submitButton.Visible = true
+        keyInput.Visible = true
+    end
+end
+
+-- Connecter le bouton à la fonction de vérification
+submitButton.MouseButton1Click:Connect(checkKey)
